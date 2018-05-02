@@ -11,3 +11,4 @@ From here my work aims to build a News classifier, to identify News from 5 categ
 * class: Functions for Classification __(used: knn)__
 * e1071: Functions for latent class analysis, fuzzy clustering, svm, bagged clustering, naive Bayes classifier... __(used: svm)__
 
+Miriam
