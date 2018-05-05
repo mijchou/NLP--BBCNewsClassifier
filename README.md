@@ -1,5 +1,7 @@
 
 # BBC-News-Classifier
+
+## Introduction
 KNN &amp; SVM classifiers on BBC News Categories
 
 This work aims to build a News classifier, to identify News from 5 categories: business, entertainment, politics, sport and tech. Two classifying techniques, KNN and SVM, are applied for comparisons. The classifier is built upon 2225 [BBC News Datasets](http://mlg.ucd.ie/datasets/bbc.html) from 2005-2006. Datasets can be found under the folder __bbc-fulltext__.
@@ -16,13 +18,7 @@ This work aims to build a News classifier, to identify News from 5 categories: b
 [Package ‘tm’](https://cran.r-project.org/web/packages/tm/tm.pdf) <br/>
 [The caret Package](https://topepo.github.io/caret/) <br/>
 
-News Classifier
-================
-Miriam Chou
-12 April 2018
-
 ## Setup
-=======
 
 1. Load libraries
 ``` r
@@ -43,7 +39,6 @@ pathname <- "../bbc-fulltext"
 ```
 
 ## Text cleaning
-==========
 
 Create **cleanCorpus()** to clean the text data
 
@@ -64,7 +59,6 @@ cleanCorpus <- function(corpus) {
 ```
 
 ##  Build Term-Document Matrix (TDM)
-=========
 
 A Term-Document Matrix describes the frequency of terms in the collection of documents. <br/>
 
@@ -91,7 +85,6 @@ tdm <- lapply(categories, generateTDM, path = pathname)
 ```
 
 ## Attach names
-===========
 
 ``` r
 bindCategoryToTDM <- function(tdm) {
@@ -105,16 +98,14 @@ bindCategoryToTDM <- function(tdm) {
 cateTDM <- lapply(tdm, bindCategoryToTDM)
 ```
 
-stack
-=====
+## Stack
 
 ``` r
 tdm.stack <- do.call(rbind.fill, cateTDM)
 tdm.stack[is.na(tdm.stack)] <- 0
 ```
 
-hold-out
-========
+## Hold-out
 
 ``` r
 train.idx <- sample(nrow(tdm.stack), ceiling(nrow(tdm.stack) * 0.7))
@@ -133,8 +124,7 @@ head(train.idx)
 
     ## [1] 1598 1510  998  213 1408 1809
 
-modelling
-=========
+## Modelling
 
 ``` r
 tdm.cate <- tdm.stack[, "targetcategory"]
