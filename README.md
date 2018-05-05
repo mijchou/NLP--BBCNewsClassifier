@@ -7,10 +7,10 @@ KNN &amp; SVM classifiers on BBC News Categories
 This work aims to build a News classifier, to identify News from 5 categories: business, entertainment, politics, sport and tech. Two classifying techniques, KNN and SVM, are applied for comparisons. The classifier is built upon 2225 [BBC News Datasets](http://mlg.ucd.ie/datasets/bbc.html) from 2005-2006. Datasets can be found under the folder __bbc-fulltext__.
 
 **R Packages used:**
-* tm: Text-Mining Package
+* tm: Text-Mining Package 
 * plyr: Tools for Splitting, Applying and Combining Data
-* class: Functions for Classification __(used: knn)__
-* e1071: Functions for latent class analysis, fuzzy clustering, svm, bagged clustering, naive Bayes classifier... __(used: svm)__
+* class: Functions for Classification **(knn)**
+* e1071: Misc Functions of the Department of Statistics, Probability Theory Group **(svm)**
 
 **Sources:<br/>**
 
@@ -26,7 +26,7 @@ libs <- c("tm", "plyr", "class", "e1071")
 lapply(libs, require, character.only = TRUE)
 ```
 
-2. Set options - do not read string as factors
+2. Set options - do not read strings as factors
 ``` r
 options(stringAsFactors = FALSE)
 ```
@@ -40,7 +40,7 @@ pathname <- "../bbc-fulltext"
 
 ## Text cleaning
 
-Create **cleanCorpus()** to clean the text data
+Create **cleanCorpus()** to clean the text data:
 
 1. Remove punctuation
 2. Remove white space
@@ -86,6 +86,14 @@ tdm <- lapply(categories, generateTDM, path = pathname)
 
 ## Attach names
 
+Create **binCategoryToTDM()** and bind predefined categories to the existing TDM:
+
+1. Coerce TDM (as a tdm object) into a matrix & transpose <br/>
+2. Coerce the transposed matrix into a data frame <br/>
+3. Bind the resulting data frame with the name of each element of tdm <br/>
+(Encouraged: Print out tdm produced from above to see how it looks like!) <br/>
+4. Rename using the predefined names of categories
+
 ``` r
 bindCategoryToTDM <- function(tdm) {
   s.mat <- t(data.matrix(tdm[["tdm"]]))
@@ -99,6 +107,8 @@ cateTDM <- lapply(tdm, bindCategoryToTDM)
 ```
 
 ## Stack
+
+
 
 ``` r
 tdm.stack <- do.call(rbind.fill, cateTDM)
