@@ -10,66 +10,48 @@ This work aims to build a News classifier, to identify News from 5 categories: b
 * class: Functions for Classification __(used: knn)__
 * e1071: Functions for latent class analysis, fuzzy clustering, svm, bagged clustering, naive Bayes classifier... __(used: svm)__
 
-Source:
-[How to Build a Text Mining, Machine Learning Document Classification System in R!](https://www.youtube.com/watch?v=j1V2McKbkLo)
+**Sources:<br/>**
+
+[How to Build a Text Mining, Machine Learning Document Classification System in R!](https://www.youtube.com/watch?v=j1V2McKbkLo) <br/>
+[Package ‘tm’](https://cran.r-project.org/web/packages/tm/tm.pdf) <br/>
+[The caret Package](https://topepo.github.io/caret/) <br/>
 
 News Classifier
 ================
 Miriam Chou
 12 April 2018
 
-Set-ups
+setup
 =======
 
+1. Load libraries
 ``` r
-# Load libraries
-
 libs <- c("tm", "plyr", "class", "e1071")
-lapply(libs, require, character.only = T)
+lapply(libs, require, character.only = TRUE)
 ```
 
-    ## Loading required package: tm
-
-    ## Warning: package 'tm' was built under R version 3.4.4
-
-    ## Loading required package: NLP
-
-    ## Loading required package: plyr
-
-    ## Warning: package 'plyr' was built under R version 3.4.4
-
-    ## Loading required package: class
-
-    ## Warning: package 'class' was built under R version 3.4.4
-
-    ## Loading required package: e1071
-
-    ## Warning: package 'e1071' was built under R version 3.4.4
-
-    ## [[1]]
-    ## [1] TRUE
-    ## 
-    ## [[2]]
-    ## [1] TRUE
-    ## 
-    ## [[3]]
-    ## [1] TRUE
-    ## 
-    ## [[4]]
-    ## [1] TRUE
-
+2. Set options - do not read string as factors
 ``` r
-# Set options
-options(stringAsFactors = F)
+options(stringAsFactors = FALSE)
+```
 
-# Set parameters
+3. Define 5 categories & specify the path of data
+``` r
 categories <- c("business", "entertainment",
                 "politics", "sport", "tech")
 pathname <- "../bbc-fulltext"
 ```
 
-clean text
+text cleaning
 ==========
+
+Create **cleanCorpus()** to clean the text data
+
+1. Remove punctuation
+2. Remove white space
+3. Convert all words to lowercase
+4. Remove words - **stopwords()** specifies the group of predefined stopwords to be removed
+<br/> i.e. **stopwords("English")** = the, is, at, which, and on
 
 ``` r
 cleanCorpus <- function(corpus) {
@@ -81,8 +63,17 @@ cleanCorpus <- function(corpus) {
 }
 ```
 
-build TDM
+build Term-Document Matrix (TDM)
 =========
+
+A Term-Document Matrix describes the frequency of terms in the collection of documents. <br/>
+
+1. Read in data from prespecified path <br/>
+2. Apply **cleanCorpus()** created from the previous step <br/>
+3. Apply **TermDocumentMatrix()** to create the resulting term-document matrix <br/>
+4. *Sparsity* specifies the percentage of emptiness a word occurs in documents. <br/>
+i.e. a term occurring 0 times in 70/100 documents = the term has a sparsity of 0.7 <br/>
+We wish to remove such words as 
 
 ``` r
 generateTDM <- function(cate, path) {
@@ -98,78 +89,7 @@ generateTDM <- function(cate, path) {
 tdm <- lapply(categories, generateTDM, path = pathname)
 ```
 
-``` r
-str(tdm)
-```
-
-    ## List of 5
-    ##  $ :List of 2
-    ##   ..$ name: chr "business"
-    ##   ..$ tdm :List of 6
-    ##   .. ..$ i       : int [1:3987] 1 2 3 4 5 6 7 8 9 10 ...
-    ##   .. ..$ j       : int [1:3987] 1 1 1 1 1 1 1 1 1 1 ...
-    ##   .. ..$ v       : num [1:3987] 2 1 2 1 1 1 1 3 1 5 ...
-    ##   .. ..$ nrow    : int 18
-    ##   .. ..$ ncol    : int 510
-    ##   .. ..$ dimnames:List of 2
-    ##   .. .. ..$ Terms: chr [1:18] "also" "chief" "company" "firm" ...
-    ##   .. .. ..$ Docs : chr [1:510] "1" "2" "3" "4" ...
-    ##   .. ..- attr(*, "class")= chr [1:2] "TermDocumentMatrix" "simple_triplet_matrix"
-    ##   .. ..- attr(*, "weighting")= chr [1:2] "term frequency" "tf"
-    ##  $ :List of 2
-    ##   ..$ name: chr "entertainment"
-    ##   ..$ tdm :List of 6
-    ##   .. ..$ i       : int [1:2802] 1 2 3 4 5 6 7 1 8 9 ...
-    ##   .. ..$ j       : int [1:2802] 1 1 1 1 1 1 1 2 2 2 ...
-    ##   .. ..$ v       : num [1:2802] 1 1 1 1 2 1 1 1 2 2 ...
-    ##   .. ..$ nrow    : int 17
-    ##   .. ..$ ncol    : int 386
-    ##   .. ..$ dimnames:List of 2
-    ##   .. .. ..$ Terms: chr [1:17] "also" "last" "one" "two" ...
-    ##   .. .. ..$ Docs : chr [1:386] "1" "2" "3" "4" ...
-    ##   .. ..- attr(*, "class")= chr [1:2] "TermDocumentMatrix" "simple_triplet_matrix"
-    ##   .. ..- attr(*, "weighting")= chr [1:2] "term frequency" "tf"
-    ##  $ :List of 2
-    ##   ..$ name: chr "politics"
-    ##   ..$ tdm :List of 6
-    ##   .. ..$ i       : int [1:6408] 1 2 3 4 5 6 7 8 9 10 ...
-    ##   .. ..$ j       : int [1:6408] 1 1 1 1 1 1 1 1 1 1 ...
-    ##   .. ..$ v       : num [1:6408] 1 1 1 2 1 1 4 1 2 1 ...
-    ##   .. ..$ nrow    : int 37
-    ##   .. ..$ ncol    : int 417
-    ##   .. ..$ dimnames:List of 2
-    ##   .. .. ..$ Terms: chr [1:37] "also" "blair" "election" "general" ...
-    ##   .. .. ..$ Docs : chr [1:417] "1" "2" "3" "4" ...
-    ##   .. ..- attr(*, "class")= chr [1:2] "TermDocumentMatrix" "simple_triplet_matrix"
-    ##   .. ..- attr(*, "weighting")= chr [1:2] "term frequency" "tf"
-    ##  $ :List of 2
-    ##   ..$ name: chr "sport"
-    ##   ..$ tdm :List of 6
-    ##   .. ..$ i       : int [1:5139] 1 2 3 4 5 6 7 8 9 10 ...
-    ##   .. ..$ j       : int [1:5139] 1 1 1 1 1 1 1 1 1 1 ...
-    ##   .. ..$ v       : num [1:5139] 1 1 3 1 1 1 1 2 1 2 ...
-    ##   .. ..$ nrow    : int 25
-    ##   .. ..$ ncol    : int 511
-    ##   .. ..$ dimnames:List of 2
-    ##   .. .. ..$ Terms: chr [1:25] "also" "can" "first" "last" ...
-    ##   .. .. ..$ Docs : chr [1:511] "1" "2" "3" "4" ...
-    ##   .. ..- attr(*, "class")= chr [1:2] "TermDocumentMatrix" "simple_triplet_matrix"
-    ##   .. ..- attr(*, "weighting")= chr [1:2] "term frequency" "tf"
-    ##  $ :List of 2
-    ##   ..$ name: chr "tech"
-    ##   ..$ tdm :List of 6
-    ##   .. ..$ i       : int [1:7221] 1 2 3 4 5 6 7 8 9 10 ...
-    ##   .. ..$ j       : int [1:7221] 1 1 1 1 1 1 1 1 1 1 ...
-    ##   .. ..$ v       : num [1:7221] 1 2 1 4 2 1 9 2 1 1 ...
-    ##   .. ..$ nrow    : int 43
-    ##   .. ..$ ncol    : int 401
-    ##   .. ..$ dimnames:List of 2
-    ##   .. .. ..$ Terms: chr [1:43] "can" "many" "new" "one" ...
-    ##   .. .. ..$ Docs : chr [1:401] "1" "2" "3" "4" ...
-    ##   .. ..- attr(*, "class")= chr [1:2] "TermDocumentMatrix" "simple_triplet_matrix"
-    ##   .. ..- attr(*, "weighting")= chr [1:2] "term frequency" "tf"
-
-attach name
+attach names
 ===========
 
 ``` r
