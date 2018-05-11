@@ -64,11 +64,13 @@ A Term-Document Matrix describes the frequency of terms in the collection of doc
 
 1. Read in data from prespecified path <br/>
 2. Apply **cleanCorpus()** created from the previous step <br/>
-3. Apply **TermDocumentMatrix()** to create the resulting term-document matrix <br/>
+3. Apply **TermDocumentMatrix()** to create the resulting term-document matrices <br/>
 4. *Sparsity* specifies the percentage of emptiness a word occurs in documents. <br/>
 i.e. a term occurring 0 times in 70/100 documents = the term has a sparsity of 0.7 <br/>
 We wish to remove words with sparsity > 0.7. <br/>
-i.e. The resulting matrix retains words occuring in 30% of documents or more. ***for me to double check***
+i.e. The resulting matrix retains words occuring in 30% of documents or more.
+
+Create an object ***tdm*** - note that several paths (articles) are being read in.
 
 ``` r
 generateTDM <- function(cate, path) {
@@ -88,9 +90,9 @@ tdm <- lapply(categories, generateTDM, path = pathname)
 
 Create **binCategoryToTDM()** and bind predefined categories to the existing TDM:
 
-1. Coerce TDM (as a tdm object) into a matrix & transpose <br/>
-2. Coerce the transposed matrix into a data frame <br/>
-3. Bind the resulting data frame with the name of each element of tdm <br/>
+1. Coerce TDM from a tdm object to matrix & transpose <br/>
+2. Coerce the transposed matrices into data frames <br/>
+3. Bind the resulting data frames with the name of each element of tdm <br/>
 (Encouraged: Print out tdm produced from above to see how it looks like!) <br/>
 4. Rename using the predefined names of categories
 
@@ -108,7 +110,10 @@ cateTDM <- lapply(tdm, bindCategoryToTDM)
 
 ## Stack
 
+Create a final data frame for analysis.
 
+1. Bind the tdm data frames into one stack row by row.
+2. Assign 0 to missing values.
 
 ``` r
 tdm.stack <- do.call(rbind.fill, cateTDM)
@@ -117,22 +122,12 @@ tdm.stack[is.na(tdm.stack)] <- 0
 
 ## Hold-out
 
+Create random samples (indicies) for training and test sets. (0.7:0.3)
+
 ``` r
 train.idx <- sample(nrow(tdm.stack), ceiling(nrow(tdm.stack) * 0.7))
 test.idx <- (1:nrow(tdm.stack)) [- train.idx]
 ```
-
-``` r
-head(test.idx)
-```
-
-    ## [1]  5  6 16 18 22 24
-
-``` r
-head(train.idx)
-```
-
-    ## [1] 1598 1510  998  213 1408 1809
 
 ## Modelling
 
