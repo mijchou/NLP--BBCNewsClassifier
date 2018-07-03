@@ -131,14 +131,19 @@ test.idx <- (1:nrow(tdm.stack)) [- train.idx]
 
 ## Modelling
 
-To perform a k-nearest-neighbour analysis, we will need a few things for knn() arguments.
-1. training = matrix (or data frame) of the training set cases, without the category being specified.
-2. test = matrix (or data frame) of the test set cases.
-3. cl = true classifications, or the true category, of the training set cases.
+With a k-nearest-neighbour (knn) model, each data point (the news article we intend to pair up with a category) search for the nearest k neighbouring data points. The category receiving the most votes from the k data points will be the final winning class (assigned to the news article.) 3 main arguments will be required to feed into the **knn()** function.
 
-With a couple of other optional arguments.
-4. k = the number of neighbour considered. (default k = 1)
-5.
+1. *training* = matrix (or data frame) of the training set cases, without the category being specified.
+2. *test* = matrix (or data frame) of the test set cases.
+3. *cl* = true classifications, or the true category, of the training set cases.
+
+With a couple of other optional arguments. <br/>
+
+4. *k* = the number of neighbours considered. (default k = 1)
+5. *l* = minimum number of votes gained for definite decision. (default l = 0)
+6. *prob* = if set TRUE, the proportion of votes (for the winning class) will be returned. (default prob = FALSE)
+
+To 
 
 ``` r
 tdm.cate <- tdm.stack[, "targetcategory"]
