@@ -149,7 +149,7 @@ These are prepared to forward into the next part:
 
 ### KNN
 
-With a k-nearest-neighbour (knn) model, each data point (the news article we intend to pair up with a category) search for the nearest k neighbouring data points. The category receiving the most votes from the k data points will be the final winning class (assigned to the news article.) 3 main arguments will be required to feed into the **knn()** function.
+With a K-Nearest-Neighbour (knn) model, each data point (the news article we intend to pair up with a category) search for the nearest k neighbouring data points. The category receiving the most votes from the k data points will be the final winning class (assigned to the news article.) 3 main arguments will be required to feed into the **knn()** function.
 
 1. *training* = matrix (or data frame) of the training set cases, without the category being specified.
 2. *test* = matrix (or data frame) of the test set cases.
@@ -192,31 +192,3 @@ knn.acc
 
 Which indicate the proportion of the correct predictions = 0.87 <br/>
 Seems like we've done a pretty good prediction!
-
-
-### SVM
-
-With  SVM
-
-``` r
-svm.fit <- svm(targetcategory~., data = tdm.stack[train.idx, ])
-svm.pred <- predict(svm.fit, newdata = tdm.stack.nl[test.idx, ])
-svm.mat <- table("Predictions" = svm.pred, "Actual" = tdm.cate[test.idx])
-svm.acc <- sum(diag(svm.mat))/sum(svm.mat)
-
-svm.mat
-```
-
-    ##                Actual
-    ## Predictions     business entertainment politics sport tech
-    ##   business           159             3        2     0    0
-    ##   entertainment        1           116        0     2    1
-    ##   politics             0             0      116     0    0
-    ##   sport                2             0        2   141    1
-    ##   tech                 2             0        2     5  112
-
-``` r
-svm.acc
-```
-
-    ## [1] 0.9655172
