@@ -4,9 +4,9 @@
 For more projects I've done please refer to: https://github.com/mijchou
 
 ## Introduction
-KNN &amp; SVM classifiers on BBC News Categories
+KNN classifier on BBC News Categories
 
-This work aims to build a News classifier, to identify News from 5 categories: business, entertainment, politics, sport and tech. Two classifying techniques, KNN and SVM, are applied for comparisons. The classifier is built upon 2225 [BBC News Datasets](http://mlg.ucd.ie/datasets/bbc.html) from 2005-2006. Datasets can be found under the folder __bbc-fulltext__.
+This work aims to build a News classifier, to identify News from 5 categories: business, entertainment, politics, sport and tech. We will perform a knn predictive analysis with the **class** package along text preprocessings using the **tm** package. The classifier is built upon 2225 [BBC News Datasets](http://mlg.ucd.ie/datasets/bbc.html) from 2005-2006. Datasets can be found under the folder __bbc-fulltext__.
 
 **R Packages used:**
 * tm: Text-Mining Package 
@@ -15,7 +15,6 @@ This work aims to build a News classifier, to identify News from 5 categories: b
 
 **Sources:<br/>**
 
-[How to Build a Text Mining, Machine Learning Document Classification System in R!](https://www.youtube.com/watch?v=j1V2McKbkLo) <br/>
 [Package ‘tm’](https://cran.r-project.org/web/packages/tm/tm.pdf) <br/>
 [The caret Package](https://topepo.github.io/caret/) <br/>
 [Package ‘class’](https://cran.r-project.org/web/packages/class/class.pdf) <br/>
