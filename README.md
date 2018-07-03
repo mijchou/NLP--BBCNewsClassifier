@@ -1,8 +1,6 @@
 
 # BBC-News-Classifier
 
-For more projects I've done please refer to: https://github.com/mijchou
-
 ## Introduction
 KNN classifier on BBC News Categories
 
