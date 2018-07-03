@@ -181,7 +181,7 @@ knn.mat
     ##   tech                 0             0        0     0   91
 
 
-It looks pretty good so far! The main diagonal gives us the number of correct prediction for each category.
+It looks pretty good so far - the main diagonal gives us the number of correct prediction for each category.
 
 ``` r
 knn.acc <- sum(diag(knn.mat))/sum(knn.mat)
