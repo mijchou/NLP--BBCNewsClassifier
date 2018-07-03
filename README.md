@@ -131,12 +131,29 @@ test.idx <- (1:nrow(tdm.stack)) [- train.idx]
 
 ## Modelling
 
+To perform a k-nearest-neighbour analysis, we will need a few things for knn() arguments.
+1. training = matrix (or data frame) of the training set cases, without the category being specified.
+2. test = matrix (or data frame) of the test set cases.
+3. cl = true classifications, or the true category, of the training set cases.
+
+With a couple of other optional arguments.
+4. k = the number of neighbour considered. (default k = 1)
+5.
+
 ``` r
 tdm.cate <- tdm.stack[, "targetcategory"]
 tdm.stack.nl <- tdm.stack[, !colnames(tdm.stack) %in% "targetcategory"]
+```
 
-# KNN
-knn.pred <- knn(tdm.stack.nl[train.idx, ], tdm.stack.nl[test.idx, ], tdm.cate[train.idx])
+### KNN
+
+We first try out a knn model which 
+
+``` r
+knn.pred <- knn(train = tdm.stack.nl[train.idx, ],
+                test = tdm.stack.nl[test.idx, ],
+                cl = tdm.cate[train.idx]),
+                k = 1)
 knn.mat <- table("Predictions" = knn.pred, "Actual" = tdm.cate[test.idx])
 knn.acc <- sum(diag(knn.mat))/sum(knn.mat)
 
