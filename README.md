@@ -17,6 +17,7 @@ This work aims to build a News classifier, to identify News from 5 categories: b
 [How to Build a Text Mining, Machine Learning Document Classification System in R!](https://www.youtube.com/watch?v=j1V2McKbkLo) <br/>
 [Package ‘tm’](https://cran.r-project.org/web/packages/tm/tm.pdf) <br/>
 [The caret Package](https://topepo.github.io/caret/) <br/>
+[Package ‘class’](https://cran.r-project.org/web/packages/class/class.pdf) <br/>
 
 ## Setup
 
@@ -131,28 +132,36 @@ test.idx <- (1:nrow(tdm.stack)) [- train.idx]
 
 ## Modelling
 
-With a k-nearest-neighbour (knn) model, each data point (the news article we intend to pair up with a category) search for the nearest k neighbouring data points. The category receiving the most votes from the k data points will be the final winning class (assigned to the news article.) 3 main arguments will be required to feed into the **knn()** function.
-
-1. *training* = matrix (or data frame) of the training set cases, without the category being specified.
-2. *test* = matrix (or data frame) of the test set cases.
-3. *cl* = true classifications, or the true category, of the training set cases.
-
-With a couple of other optional arguments. <br/>
-
-4. *k* = the number of neighbours considered. (default k = 1)
-5. *l* = minimum number of votes gained for definite decision. (default l = 0)
-6. *prob* = if set TRUE, the proportion of votes (for the winning class) will be returned. (default prob = FALSE)
-
-To 
+We will add two more steps of preprocessing before we start feeding the data (news article) into our models.
 
 ``` r
 tdm.cate <- tdm.stack[, "targetcategory"]
 tdm.stack.nl <- tdm.stack[, !colnames(tdm.stack) %in% "targetcategory"]
 ```
 
+1. tdm.cate stores the column of the target category (including both training and test sets.)
+2. tdm.stack.nl stores the rest of the columns. <br/>
+
+A quick break down of *!colnames(tdm.stack) %in% "targetcategory"*:
+colnames(tdm.stack) returns all the column names of the tdm.stack. While %in% is the operator of searching, %in% "targetcategory" searches for and return the column. We want the columns that are NOT "targetcategory" that we inverse the result with an ! operator.
+
+These are prepared to forward into the next part:
+
 ### KNN
 
-We first try out a knn model which 
+With a k-nearest-neighbour (knn) model, each data point (the news article we intend to pair up with a category) search for the nearest k neighbouring data points. The category receiving the most votes from the k data points will be the final winning class (assigned to the news article.) 3 main arguments will be required to feed into the **knn()** function.
+
+1. *training* = matrix (or data frame) of the training set cases, without the category being specified.
+2. *test* = matrix (or data frame) of the test set cases.
+3. *cl* = true classifications, or the true category, of the training set cases.
+
+And a couple of optional arguments. <br/>
+
+4. *k* = the number of neighbours considered. (default k = 1)
+5. *l* = minimum number of votes gained for definite decision. (default l = 0)
+6. *prob* = if set TRUE, the proportion of votes (for the winning class) will be returned. (default prob = FALSE)
+
+Now we feed the dataset required into the model. Compare the predictions and the actual values.
 
 ``` r
 knn.pred <- knn(train = tdm.stack.nl[train.idx, ],
@@ -160,8 +169,6 @@ knn.pred <- knn(train = tdm.stack.nl[train.idx, ],
                 cl = tdm.cate[train.idx]),
                 k = 1)
 knn.mat <- table("Predictions" = knn.pred, "Actual" = tdm.cate[test.idx])
-knn.acc <- sum(diag(knn.mat))/sum(knn.mat)
-
 knn.mat
 ```
 
@@ -173,7 +180,11 @@ knn.mat
     ##   sport                2             5        6   131    3
     ##   tech                 0             0        0     0   91
 
+
+It works pretty well so far! The diag
+
 ``` r
+knn.acc <- sum(diag(knn.mat))/sum(knn.mat)
 knn.acc
 ```
 
