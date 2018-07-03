@@ -181,7 +181,7 @@ knn.mat
     ##   tech                 0             0        0     0   91
 
 
-It works pretty well so far! The diag
+It looks pretty good so far! The main diagonal gives us the number of correct prediction for each category.
 
 ``` r
 knn.acc <- sum(diag(knn.mat))/sum(knn.mat)
@@ -190,8 +190,15 @@ knn.acc
 
     ## [1] 0.8665667
 
+Which indicate the proportion of the correct predictions = 0.87 <br/>
+Seems like we've done a pretty good prediction!
+
+
+### SVM
+
+With  SVM
+
 ``` r
-# SVM
 svm.fit <- svm(targetcategory~., data = tdm.stack[train.idx, ])
 svm.pred <- predict(svm.fit, newdata = tdm.stack.nl[test.idx, ])
 svm.mat <- table("Predictions" = svm.pred, "Actual" = tdm.cate[test.idx])
