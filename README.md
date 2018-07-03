@@ -1,12 +1,12 @@
 
 # BBC-News-Classifier
 
-For more projects I've done please refer to: https://github.com/mijchou
-
 ## Introduction
 KNN &amp; SVM classifiers on BBC News Categories
 
 This work aims to build a News classifier, to identify News from 5 categories: business, entertainment, politics, sport and tech. Two classifying techniques, KNN and SVM, are applied for comparisons. The classifier is built upon 2225 [BBC News Datasets](http://mlg.ucd.ie/datasets/bbc.html) from 2005-2006. Datasets can be found under the folder __bbc-fulltext__.
+
+For more projects I've done please refer to: https://github.com/mijchou
 
 **R Packages used:**
 * tm: Text-Mining Package 
