@@ -13,6 +13,7 @@ This work aims to build a News classifier, to identify News from 5 categories: b
 
 **Sources:<br/>**
 
+[How to Build a Text Mining, Machine Learning Document Classification System in R!](https://www.youtube.com/watch?v=j1V2McKbkLo) <br/>
 [Package ‘tm’](https://cran.r-project.org/web/packages/tm/tm.pdf) <br/>
 [The caret Package](https://topepo.github.io/caret/) <br/>
 [Package ‘class’](https://cran.r-project.org/web/packages/class/class.pdf) <br/>
